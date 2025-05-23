@@ -12,8 +12,8 @@ class TaxiHomeUI extends StatefulWidget {
 
 class _TaxiHomeUIState extends State<TaxiHomeUI> {
   // TextField Controllers
-  TextEditingController _distanceController = TextEditingController();
-  TextEditingController _trafficjamTimeController = TextEditingController();
+  TextEditingController _distanceCtrl = TextEditingController();
+  TextEditingController _trafficjamTimeCtrl = TextEditingController();
 
   // Alert Dialog Method
   _warningDialog(msg) {
@@ -70,7 +70,7 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                     ),
                   ),
                   TextField(
-                    controller: _distanceController,
+                    controller: _distanceCtrl,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -89,7 +89,7 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                     height: 20,
                   ),
                   TextField(
-                    controller: _trafficjamTimeController,
+                    controller: _trafficjamTimeCtrl,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -110,20 +110,21 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                   ElevatedButton(
                     onPressed: () {
                       // validate UI หากมีปัญหาแสดง alert dialog
-                      if (_distanceController.text.isEmpty) {
+                      if (_distanceCtrl.text.isEmpty) {
                         _warningDialog('ป้อนระยะทางด้วย...');
-                      } else if (_trafficjamTimeController.text.isEmpty) {
+                      } else if (_trafficjamTimeCtrl.text.isEmpty) {
                         _warningDialog('ป้อนเวลารถติดด้วย...');
                       } else {
                         double distance =
-                            double.parse(_distanceController.text);
+                            double.parse(_distanceCtrl.text);
                         double trafficjamTime =
-                            double.parse(_trafficjamTimeController.text);
+                            double.parse(_trafficjamTimeCtrl.text);
 
-                        double notFirstKM = distance - 1;
+                        double firstKmPrice = 35;
+                        double notFirstKm = distance - 1;
 
                         double totalPay =
-                            35 + (notFirstKM * 5.50) + (trafficjamTime * 0.50);
+                            firstKmPrice + (notFirstKm * 5.50) + (trafficjamTime * 0.50);
 
                         Navigator.push(
                             context,
@@ -158,8 +159,8 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _distanceController.clear();
-                      _trafficjamTimeController.clear();
+                      _distanceCtrl.clear();
+                      _trafficjamTimeCtrl.clear();
                     },
                     child: Text(
                       'ยกเลิก',
