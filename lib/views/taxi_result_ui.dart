@@ -1,7 +1,14 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TaxiResultUI extends StatefulWidget {
-  const TaxiResultUI({super.key});
+  final double? distance;
+  final double? trafficjamTime;
+  final double? totalPay;
+
+  TaxiResultUI({super.key, this.distance, this.trafficjamTime, this.totalPay});
 
   @override
   State<TaxiResultUI> createState() => _TaxiResultUIState();
@@ -10,6 +17,9 @@ class TaxiResultUI extends StatefulWidget {
 class _TaxiResultUIState extends State<TaxiResultUI> {
   @override
   Widget build(BuildContext context) {
+    NumberFormat fm = NumberFormat('#,###,##0.##');
+    // NumberFormat fmDistanceAndTime = NumberFormat('#,###,##0.00');
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFFB22C),
@@ -71,7 +81,7 @@ class _TaxiResultUIState extends State<TaxiResultUI> {
                       ),
                     ),
                     Text(
-                      '${widget}',
+                      '${fm.format(widget.distance)}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
@@ -100,7 +110,7 @@ class _TaxiResultUIState extends State<TaxiResultUI> {
                       ),
                     ),
                     Text(
-                      '${widget}',
+                      '${fm.format(widget.trafficjamTime)}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
@@ -129,7 +139,7 @@ class _TaxiResultUIState extends State<TaxiResultUI> {
                       ),
                     ),
                     Text(
-                      '${widget}',
+                      '${fm.format(widget.totalPay)}',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
