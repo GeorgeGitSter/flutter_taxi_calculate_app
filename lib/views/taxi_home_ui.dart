@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_taxi_calculate_app/views/taxi_result_ui.dart';
 
-
 class TaxiHomeUI extends StatefulWidget {
   const TaxiHomeUI({super.key});
 
@@ -52,150 +51,153 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-          ),
-          child: Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 40,
+      body: GestureDetector(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 40,
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 40,
+                    ),
+                    child: Image.asset(
+                      'assets/images/TaxiLogo.png',
+                      width: 200,
+                    ),
                   ),
-                  child: Image.asset(
-                    'assets/images/TaxiLogo.png',
-                    width: 200,
+                  TextField(
+                    controller: _distanceController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "ป้อนระยะทาง",
+                        labelText: "ระยะทาง (กิโลเมตร)",
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 25,
+                          horizontal: 20,
+                        )),
                   ),
-                ),
-                TextField(
-                  controller: _distanceController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "ป้อนระยะทาง",
-                      labelText: "ระยะทาง (กิโลเมตร)",
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextField(
+                    controller: _trafficjamTimeController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "ป้อนเวลารถติด (ไม่มีป้อน 0)",
+                        labelText: "เวลารถติด (นาที)",
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 25,
+                          horizontal: 20,
+                        )),
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // validate UI หากมีปัญหาแสดง alert dialog
+                      if (_distanceController.text.isEmpty) {
+                        _warningDialog('ป้อนระยะทางด้วย...');
+                      } else if (_trafficjamTimeController.text.isEmpty) {
+                        _warningDialog('ป้อนเวลารถติดด้วย...');
+                      } else {
+                        double distance =
+                            double.parse(_distanceController.text);
+                        double trafficjamTime =
+                            double.parse(_trafficjamTimeController.text);
+
+                        double notFirstKM = distance - 1;
+
+                        double totalPay =
+                            35 + (notFirstKM * 5.50) + (trafficjamTime * 0.50);
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TaxiResultUI(
+                                      distance: distance,
+                                      trafficjamTime: trafficjamTime,
+                                      totalPay: totalPay,
+                                    )));
+                      }
+                    },
+                    child: Text(
+                      'คำนวณ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 25,
-                        horizontal: 20,
-                      )),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  controller: _trafficjamTimeController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "ป้อนเวลารถติด (ไม่มีป้อน 0)",
-                      labelText: "เวลารถติด (นาที)",
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFFFB22C),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 25,
-                        horizontal: 20,
-                      )),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // validate UI หากมีปัญหาแสดง alert dialog
-                    if (_distanceController.text.isEmpty) {
-                      _warningDialog('ป้อนระยะทางด้วย...');
-                    } else if (_trafficjamTimeController.text.isEmpty) {
-                      _warningDialog('ป้อนเวลารถติดด้วย...');
-                    } else {
-                      double distance = double.parse(_distanceController.text);
-                      double trafficjamTime =
-                          double.parse(_trafficjamTimeController.text);
-
-                      double notFirstKM = distance - 1;
-
-                      double totalPay =
-                          35 + (notFirstKM * 5.50) + (trafficjamTime * 0.50);
-
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TaxiResultUI(
-                                    distance: distance,
-                                    trafficjamTime: trafficjamTime,
-                                    totalPay: totalPay,
-                                  )));
-                    }
-                  },
-                  child: Text(
-                    'คำนวณ',
+                      minimumSize: Size(
+                        double.infinity,
+                        60,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _distanceController.clear();
+                      _trafficjamTimeController.clear();
+                    },
+                    child: Text(
+                      'ยกเลิก',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[900]!,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      minimumSize: Size(
+                        double.infinity,
+                        60,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 60,
+                  ),
+                  Image.asset(
+                    'assets/images/Chetsada_Signature.png',
+                    width: 100,
+                  ),
+                  Text(
+                    'Created by Chetsada',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 12,
+                      color: Colors.grey,
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFFB22C),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    minimumSize: Size(
-                      double.infinity,
-                      60,
-                    ),
+                  SizedBox(
+                    height: 60,
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _distanceController.clear();
-                    _trafficjamTimeController.clear();
-                  },
-                  child: Text(
-                    'ยกเลิก',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[900]!,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    minimumSize: Size(
-                      double.infinity,
-                      60,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 60,
-                ),
-                Image.asset(
-                  'assets/images/Chetsada_Signature.png',
-                  width: 100,
-                ),
-                Text(
-                  'Created by Chetsada',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                SizedBox(
-                  height: 60,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
