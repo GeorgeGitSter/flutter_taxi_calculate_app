@@ -24,12 +24,25 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
         content: Text(
           msg,
         ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
         actions: [
           //  TextButton ปุ่มไม่มีพื้นหลัง
-          OutlinedButton(
+          ElevatedButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'ตกลง',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFFFB22C),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
           ),
         ],
@@ -73,6 +86,7 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                     controller: _distanceCtrl,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         border: OutlineInputBorder(),
                         hintText: "ป้อนระยะทาง",
                         labelText: "ระยะทาง (กิโลเมตร)",
@@ -92,6 +106,7 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                     controller: _trafficjamTimeCtrl,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         border: OutlineInputBorder(),
                         hintText: "ป้อนเวลารถติด (ไม่มีป้อน 0)",
                         labelText: "เวลารถติด (นาที)",
@@ -115,16 +130,16 @@ class _TaxiHomeUIState extends State<TaxiHomeUI> {
                       } else if (_trafficjamTimeCtrl.text.isEmpty) {
                         _warningDialog('ป้อนเวลารถติดด้วย...');
                       } else {
-                        double distance =
-                            double.parse(_distanceCtrl.text);
+                        double distance = double.parse(_distanceCtrl.text);
                         double trafficjamTime =
                             double.parse(_trafficjamTimeCtrl.text);
 
                         double firstKmPrice = 35;
                         double notFirstKm = distance - 1;
 
-                        double totalPay =
-                            firstKmPrice + (notFirstKm * 5.50) + (trafficjamTime * 0.50);
+                        double totalPay = firstKmPrice +
+                            (notFirstKm * 5.50) +
+                            (trafficjamTime * 0.50);
 
                         Navigator.push(
                             context,

@@ -154,6 +154,13 @@ class _TaxiResultUIState extends State<TaxiResultUI> {
                     ),
                   ],
                 ),
+                // Text(
+                //   'คิดเป็นเงินที่ต้องจ่าย ${fm.format(widget.totalPay)} บาท',
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
               ],
             ),
           ),
